@@ -8,10 +8,20 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+// import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+
+WebBrowser.maybeCompleteAuthSession();
+
+// const [request, response, promptAsync] = Google.useAuthRequest({
+//   androidclientid:
+//     "409258060032-1vmain9lnreqmbkgkun5l4j330i2vk83.apps.googleusercontent.com",
+// });
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [userInfo, setUserInfo] = React.useState(null);
   const navigation = useNavigation();
 
   const handleLogin = () => {
@@ -81,6 +91,9 @@ const LoginPage = () => {
           onPress={handleRegistration}
         >
           <Text style={styles.registerButtonText}>Register</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Login with Google</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>

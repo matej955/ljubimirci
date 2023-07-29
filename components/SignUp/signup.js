@@ -6,9 +6,10 @@ import {
   Button,
   ImageBackground,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 
-const Registration = ({ navigation }) => {
+const SignUp = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,36 +36,35 @@ const Registration = ({ navigation }) => {
   return (
     <ImageBackground
       source={require("./background.jpg")}
-      style={styles.container}
+      style={styles.background}
     >
       <View style={styles.container}>
         <Text style={styles.title}>Registracija</Text>
-        <View style={styles.inputContainer}>
+        <View style={styles.input}>
           <TextInput
-            style={styles.input}
             placeholder="Username"
             value={username}
             onChangeText={setUsername}
             placeholderTextColor="#fff"
           />
         </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          placeholderTextColor="#fff"
-          secureTextEntry
-        />
-        <Button
-          title="Registracija"
-          style={styles.button}
-          onPress={handleRegistration}
-        />
+        <View style={styles.input}>
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            placeholderTextColor="#fff"
+            secureTextEntry
+          />
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleRegistration}>
+          <Text style={styles.registerButtonText}>Register</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
 };
+
 const styles = StyleSheet.create({
   background: {
     flex: 1,
@@ -80,16 +80,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: "bold",
-    marginBottom: 48,
+    marginBottom: 38,
     color: "#fff",
     textAlign: "center",
   },
-  inputContainer: {
-    width: "80%",
-    marginBottom: 16,
-  },
   input: {
-    width: "100%",
+    width: "80%",
     height: 48,
     padding: 12,
     borderWidth: 1,
@@ -97,7 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     backgroundColor: "transparent",
     fontSize: 16,
-    color: "#fff",
+    marginBottom: 16,
   },
   button: {
     backgroundColor: "#f9a826",
@@ -109,26 +105,10 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     elevation: 3,
   },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  registerButton: {
-    backgroundColor: "transparent",
-    width: "80%",
-    height: 48,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: "#fff",
-    elevation: 3,
-  },
   registerButtonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
   },
 });
-export default Registration;
+export default SignUp;
