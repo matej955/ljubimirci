@@ -34,6 +34,10 @@ const SignUp = ({}) => {
     if (email == "" || password == "") {
       alert("Niste unijeli sve podatke!");
     }
+
+    if (email === email) {
+      alert("Korisnik već postoji!");
+    }
   };
 
   return (
@@ -45,6 +49,7 @@ const SignUp = ({}) => {
         <Text style={styles.title}>Registracija</Text>
         <View style={styles.input}>
           <TextInput
+            color="#fff"
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
@@ -53,6 +58,7 @@ const SignUp = ({}) => {
         </View>
         <View style={styles.input}>
           <TextInput
+            color="#fff"
             placeholder="Password"
             value={password}
             onChangeText={setPassword}

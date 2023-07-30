@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,24 +11,33 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebaseConfig";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBMDTuiaUNyKx3pHTz1KJL3NpWCkgXDa2M",
-  authDomain: "zivotinjci.firebaseapp.com",
-  databaseURL: "https://zivotinjci.firebaseio.com",
-  projectId: "zivotinjci",
-  storageBucket: "zivotinjci.appspot.com",
-  // messagingSenderId: "sender-id",
-  appId: "1:20154027515:android:25475513285a1083598f5e",
-  // measurementId: "G-measurement-id",
-};
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  // const [errorCode, setErrorCode] = useState(""); // Separate state variables for errorCode and errorMessage
-  // const [errorMessage, setErrorMessage] = useState(""); // Separate state variables for errorCode and errorMessage
+  const [errorCode, setErrorCode] = useState(""); // Separate state variables for errorCode and errorMessage
+  const [errorMessage, setErrorMessage] = useState(""); // Separate state variables for errorCode and errorMessage
+
+  useEffect(() => {
+    // Check if there are stored credentials and automatically log the user in
+    const tryAutoLogin = async () => {
+      try {
+        const storedEmail = await AsyncStorage.getItem("storedEmail");
+        const storedPassword = await AsyncStorage.getItem("storedPassword");
+        if (storedEmail && storedPassword) {
+          setEmail(storedEmail);
+          setPassword(storedPassword);
+          handleLogin();
+        }
+      } catch (error) {
+        console.log("Error reading stored credentials:", error);
+      }
+    };
+    tryAutoLogin();
+    console.log("Auto login successful");
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -36,14 +45,14 @@ const LoginPage = () => {
 
       if (user) {
         console.log(user.user.uid);
-        alert("Uspješno ste se prijavili!");
+        // Save user credentials to AsyncStorage on successful login
+        await AsyncStorage.setItem("storedEmail", email);
+        await AsyncStorage.setItem("storedPassword", password);
       }
     } catch (error) {
-      console.log(error);
-      alert("Pogrešan email ili lozinka!");
-      // setErrorCode(error.code);
-      // setErrorMessage(error.message);
-      debugger;
+      // console.log("greška");
+      setErrorCode(error.code);
+      setErrorMessage(error.message);
     }
   };
 
