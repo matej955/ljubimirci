@@ -7,10 +7,14 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+  getAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
-import Toast from "react-native-toast-message";
 
 const SignUp = ({}) => {
   // const [username, setUsername] = useState("");
@@ -18,25 +22,51 @@ const SignUp = ({}) => {
   const [email, setEmail] = useState("");
   const navigation = useNavigation();
 
+  const checkIfUserExists = async (auth, email) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, "temporary_password");
+      return true; // User exists
+    } catch (error) {
+      // Handle specific error codes if needed
+      if (error.code === "auth/user-not-found") {
+        return false; // User does not exist
+      }
+      console.log("Error checking if user exists:", error);
+      return true; // Treat other errors as if the user exists to prevent registration
+    }
+  };
+
   const handleRegistration = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
+      // Initialize Firebase auth
+      const auth = getAuth();
 
-      if (user) {
-        console.log(user.user.uid);
-        alert("Uspješno ste se registrirali!");
-        navigation.navigate("Prijava");
+      // Check if the user already exists
+      const userExists = await checkIfUserExists(auth, email);
+
+      if (userExists) {
+        // Display an alert if the user already exists
+        alert("Korisnik već postoji!");
+      } else {
+        // Create a new user if the user doesn't exist
+        const user = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        if (user) {
+          console.log(user.user.uid);
+          alert("Uspješno ste se registrirali!");
+          navigation.navigate("Prijava");
+        }
       }
     } catch (error) {
       console.log(error);
     }
 
-    if (email == "" || password == "") {
+    if (email === "" || password === "") {
       alert("Niste unijeli sve podatke!");
-    }
-
-    if (email === email) {
-      alert("Korisnik već postoji!");
     }
   };
 
