@@ -3,34 +3,37 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebaseConfig";
+import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
-const SignUp = ({ navigation }) => {
-  const [username, setUsername] = useState("");
+const SignUp = ({}) => {
+  // const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const navigation = useNavigation();
 
-  const handleRegistration = () => {
-    fetch("https://example.com/register", {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          navigation.navigate("Login");
-        } else {
-          alert("Registration failed");
-        }
-      })
-      .catch((error) => {
-        alert("An error occurred while registering");
-      });
+  const handleRegistration = async () => {
+    try {
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+
+      if (user) {
+        console.log(user.user.uid);
+        alert("Uspješno ste se registrirali!");
+        navigation.navigate("Prijava");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    if (email == "" || password == "") {
+      alert("Niste unijeli sve podatke!");
+    }
   };
 
   return (
@@ -42,9 +45,9 @@ const SignUp = ({ navigation }) => {
         <Text style={styles.title}>Registracija</Text>
         <View style={styles.input}>
           <TextInput
-            placeholder="Username"
-            value={username}
-            onChangeText={setUsername}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
             placeholderTextColor="#fff"
           />
         </View>
@@ -57,7 +60,10 @@ const SignUp = ({ navigation }) => {
             secureTextEntry
           />
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleRegistration}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={(event) => handleRegistration(event)} // Pass the event object
+        >
           <Text style={styles.registerButtonText}>Register</Text>
         </TouchableOpacity>
       </View>

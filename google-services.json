@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "20154027515",
+    "project_id": "zivotinjci",
+    "storage_bucket": "zivotinjci.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20154027515:android:25475513285a1083598f5e",
+        "android_client_info": {
+          "package_name": "com.sabo95.zivotinje"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20154027515-09bknjg4eq3aordff59cjdkh95mgr9eb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sabo95.zivotinje",
+            "certificate_hash": "9db30ab25c224ee4cff325364416fab8ee34d259"
+          }
+        },
+        {
+          "client_id": "20154027515-c5ojm7748hsjov6p35mrq2kcecsr4v8b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMDTuiaUNyKx3pHTz1KJL3NpWCkgXDa2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20154027515-c5ojm7748hsjov6p35mrq2kcecsr4v8b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

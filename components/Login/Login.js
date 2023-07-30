@@ -6,52 +6,50 @@ import {
   TouchableOpacity,
   StyleSheet,
   ImageBackground,
+  AppRegistry,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-// import * as Google from "expo-auth-session/providers/google";
-import * as WebBrowser from "expo-web-browser";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebaseConfig";
 
-WebBrowser.maybeCompleteAuthSession();
-
-// const [request, response, promptAsync] = Google.useAuthRequest({
-//   androidclientid:
-//     "409258060032-1vmain9lnreqmbkgkun5l4j330i2vk83.apps.googleusercontent.com",
-// });
+const firebaseConfig = {
+  apiKey: "AIzaSyBMDTuiaUNyKx3pHTz1KJL3NpWCkgXDa2M",
+  authDomain: "zivotinjci.firebaseapp.com",
+  databaseURL: "https://zivotinjci.firebaseio.com",
+  projectId: "zivotinjci",
+  storageBucket: "zivotinjci.appspot.com",
+  // messagingSenderId: "sender-id",
+  appId: "1:20154027515:android:25475513285a1083598f5e",
+  // measurementId: "G-measurement-id",
+};
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [userInfo, setUserInfo] = React.useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigation = useNavigation();
+  // const [errorCode, setErrorCode] = useState(""); // Separate state variables for errorCode and errorMessage
+  // const [errorMessage, setErrorMessage] = useState(""); // Separate state variables for errorCode and errorMessage
 
-  const handleLogin = () => {
-    if (username === "" || password === "") {
-      alert("Please enter a username and password");
-      return;
+  const handleLogin = async () => {
+    try {
+      const user = await signInWithEmailAndPassword(auth, email, password);
+
+      if (user) {
+        console.log(user.user.uid);
+        alert("Uspješno ste se prijavili!");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Pogrešan email ili lozinka!");
+      // setErrorCode(error.code);
+      // setErrorMessage(error.message);
+      debugger;
     }
-
-    fetch("https://example.com/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          alert("Login successful!");
-        } else {
-          alert("Invalid username or password");
-        }
-      })
-      .catch((error) => {
-        alert("An error occurred while logging in");
-      });
   };
 
   const handleRegistration = () => {
     onPress = () => {
-      navigation.navigate("Registration");
+      navigation.navigate("Registracija");
     };
 
     onPress();
@@ -67,9 +65,9 @@ const LoginPage = () => {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Username"
-            value={username}
-            onChangeText={setUsername}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
             placeholderTextColor="#fff"
           />
         </View>
@@ -92,9 +90,11 @@ const LoginPage = () => {
         >
           <Text style={styles.registerButtonText}>Register</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Login with Google</Text>
-        </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText} onPress={handleGoogleLogin}>
+            Login with Google
+          </Text>
+        </TouchableOpacity> */}
       </View>
     </ImageBackground>
   );
@@ -166,5 +166,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
+AppRegistry.registerComponent("LoginPage", () => LoginPage);
 
 export default LoginPage;
