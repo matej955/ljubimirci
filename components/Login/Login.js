@@ -12,16 +12,16 @@ import { useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Firebase from "./firebaseConfig";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const [errorCode, setErrorCode] = useState(""); // Separate state variables for errorCode and errorMessage
-  const [errorMessage, setErrorMessage] = useState(""); // Separate state variables for errorCode and errorMessage
+  const [errorCode, setErrorCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    // Check if there are stored credentials and automatically log the user in
     const tryAutoLogin = async () => {
       try {
         const storedEmail = await AsyncStorage.getItem("storedEmail");
@@ -30,12 +30,14 @@ const LoginPage = () => {
           setEmail(storedEmail);
           setPassword(storedPassword);
           handleLogin();
+          navigation.navigate("Pocetna");
         }
       } catch (error) {
         console.log("Error reading stored credentials:", error);
       }
     };
     tryAutoLogin();
+
     console.log("Auto login successful");
   }, []);
 
@@ -45,17 +47,24 @@ const LoginPage = () => {
 
       if (user) {
         console.log(user.user.uid);
-        // Save user credentials to AsyncStorage on successful login
         await AsyncStorage.setItem("storedEmail", email);
         await AsyncStorage.setItem("storedPassword", password);
+        navigation.navigate("Pocetna");
       }
     } catch (error) {
-      // console.log("greška");
+      console.log("Error logging in:", error);
       setErrorCode(error.code);
       setErrorMessage(error.message);
     }
   };
 
+  const handleGuestLogin = async () => {
+    onPress = () => {
+      navigation.navigate("Pocetna");
+    };
+
+    onPress();
+  };
   const handleRegistration = () => {
     onPress = () => {
       navigation.navigate("Registracija");
@@ -91,19 +100,17 @@ const LoginPage = () => {
           />
         </View>
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText}>Prijava</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.registerButton}
           onPress={handleRegistration}
         >
-          <Text style={styles.registerButtonText}>Register</Text>
+          <Text style={styles.registerButtonText}>Registracija</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText} onPress={handleGoogleLogin}>
-            Login with Google
-          </Text>
-        </TouchableOpacity> */}
+        <TouchableOpacity onPress={handleGuestLogin}>
+          <Text style={styles.guestButton}>Prijavi se kao gost</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
@@ -159,7 +166,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   registerButton: {
-    backgroundColor: "transparent",
     width: "80%",
     height: 48,
     alignItems: "center",
@@ -173,6 +179,15 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  guestButton: {
+    color: "#fff",
+    marginTop: 16,
+    width: "80%",
+    height: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
   },
 });
 
