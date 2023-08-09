@@ -29,16 +29,22 @@ const LoginPage = () => {
         if (storedEmail && storedPassword) {
           setEmail(storedEmail);
           setPassword(storedPassword);
-          handleLogin();
-          navigation.navigate("Pocetna");
+          // Avoid calling handleLogin() and navigation here
         }
       } catch (error) {
         console.log("Error reading stored credentials:", error);
       }
     };
+
     tryAutoLogin();
 
     console.log("Auto login successful");
+
+    // After tryAutoLogin, perform navigation and login if needed
+    if (email && password) {
+      handleLogin();
+      navigation.navigate("Pocetna");
+    }
   }, []);
 
   const handleLogin = async () => {

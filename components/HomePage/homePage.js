@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
@@ -10,11 +9,31 @@ import {
 } from "react-native";
 import { SearchBar } from "@rneui/themed";
 import avatar from "./images/avatar.png";
+import { useNavigation } from "@react-navigation/native";
+import sapaBijela from "./images/sapaBijela.png";
+import background from "./images/background.png";
+import filter from "./images/filter2.png";
+import mainBackground from "./images/4.png";
+import animals from "./images/1.png";
+import BottomPopup from "../PopUp/popUp";
 
 const HomePage = () => {
-  const [search, setSearch] = useState("");
-  const updateSearch = (search) => {
-    setSearch(search);
+  const navigation = useNavigation();
+  const [showPopup, setShowPopup] = useState(false);
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };
+
+  const handlePopupOptionPress = (optionName) => {
+    closePopup();
+    if (optionName === "Kupi") {
+      navigation.navigate("Kupi");
+    } else if (optionName === "Prodaj") {
+      navigation.navigate("Prodaj");
+    } else if (optionName === "Udomi") {
+      navigation.navigate("Udomi");
+    }
   };
 
   const handleAvatarPress = () => {
@@ -28,8 +47,8 @@ const HomePage = () => {
   };
 
   return (
-    <ImageBackground source={require("./4.png")} style={styles.background}>
-      <Image source={require("./sapaBijela.png")} style={styles.logo} />
+    <ImageBackground source={mainBackground} style={styles.background}>
+      <Image source={sapaBijela} style={styles.logo} />
       <View style={styles.avatarContainer}>
         <TouchableOpacity onPress={handleAvatarPress}>
           <Image source={avatar} style={styles.avatar} />
@@ -61,7 +80,6 @@ const HomePage = () => {
             leftIconContainerStyle={{ color: "white" }}
             rightIconContainerStyle={{}}
             loadingProps={{}}
-            onChangeText={updateSearch}
             placeholder="Pretraži"
             placeholderTextColor="white"
             cancelButtonTitle="Cancel"
@@ -76,13 +94,31 @@ const HomePage = () => {
         </View>
       </View>
       <View style={styles.izbornikContainer}>
-        <TouchableOpacity style={styles.izbornik}>
+        <TouchableOpacity
+          style={styles.izbornik}
+          onPress={() => setShowPopup(true)}
+        >
           <ImageBackground
-            source={require("./background.png")}
+            source={background}
             style={styles.izbornikBackground}
           >
+            {showPopup && (
+              <BottomPopup
+                show={showPopup}
+                title={"Odaberi Opciju"}
+                animationType={"fade"}
+                closePopup={closePopup}
+                data={[
+                  { id: 0, name: "Kupi" },
+                  { id: 1, name: "Prodaj" },
+                  { id: 2, name: "Udomi" },
+                ]}
+                handlePopupOptionPress={handlePopupOptionPress}
+                haveOutsideTouch={true}
+              />
+            )}
             <Text style={styles.izbornikText}>Pokloni/Prodaj</Text>
-            <Image source={require("./1.png")} style={styles.izbornikLogo} />
+            <Image source={animals} style={styles.izbornikLogo} />
           </ImageBackground>
         </TouchableOpacity>
       </View>
@@ -103,7 +139,7 @@ const HomePage = () => {
           style={styles.filterSearch}
           onPress={handleFilterSearchPress}
         >
-          <Image source={require("./filter2.png")} style={styles.filter} />
+          <Image source={filter} style={styles.filter} />
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -137,7 +173,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 120,
     left: 20,
-    // overflow: "hidden",
   },
   izbornik: {
     width: "90%",
@@ -189,20 +224,13 @@ const styles = StyleSheet.create({
     left: 24,
   },
   searchBarContainer: {
-    // backgroundColor: "red",
     width: "100%",
-    // height: 48,
-    // bottom: 100,
-    // alignSelf: "center", // Center the search bar container horizontally
     position: "absolute",
-    // top: 120,
-    zIndex: 1, // Add zIndex to make sure the search bar is above other elements
+    zIndex: 1,
   },
   avatarContainer: {
     width: 40,
     height: 40,
-    // backgroundColor: "red",
-    // alignSelf: "center", // Center the search bar container horizontally
     position: "absolute",
     top: 60,
     zIndex: 1,
@@ -211,7 +239,6 @@ const styles = StyleSheet.create({
   textContainer: {
     width: "70%",
     height: 40,
-    // backgroundColor: "red",
     position: "absolute",
     left: 20,
     top: 400,
@@ -219,7 +246,6 @@ const styles = StyleSheet.create({
   izbornikContainer: {
     width: "100%",
     height: 100,
-    // backgroundColor: "red",
     position: "absolute",
     top: 204,
     left: 22,
@@ -228,12 +254,9 @@ const styles = StyleSheet.create({
   filterSearchContainer: {
     width: 40,
     height: 40,
-    // backgroundColor: "red",
     position: "absolute",
     right: 24,
     top: 400,
-    // bottom: 454,
-    // alignSelf: "center",
   },
 });
 
