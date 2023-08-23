@@ -1,26 +1,63 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
-  Text,
   TextInput,
-  StyleSheet,
   TouchableOpacity,
-  ImagePicker,
+  Text,
+  Image,
+  StyleSheet,
 } from "react-native";
+import { collection, getDocs } from "firebase/firestore";
+import * as ImagePicker from "expo-image-picker";
 import { Picker } from "@react-native-picker/picker";
-// import * as ImagePicker from "expo-image-picker";
-
-const categories = ["Kategorija 1", "Kategorija 2", "Kategorija 3"];
-const genders = ["Muški", "Ženski", "Nedefinirano"]; // Replace with actual gender options
+import { auth, firestore, app } from "../../firebaseConfig";
 
 const Buy = () => {
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
-  const [gender, setGender] = useState("");
+  const [genderOptions, setGenderOptions] = useState([]);
   const [age, setAge] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [gender, setGender] = useState("");
+
+  useEffect(() => {
+    const fetchGenders = async () => {
+      try {
+        const gendersQuerySnapshot = await getDocs(
+          collection(firestore, "gender") // Use the firestore instance
+        );
+        const gendersData = gendersQuerySnapshot.docs.map(
+          (doc) => doc.data().name
+        );
+        setGenderOptions(gendersData);
+      } catch (error) {
+        console.error("Error fetching genders:", error);
+      }
+    };
+
+    fetchGenders();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriesQuerySnapshot = await getDocs(
+          collection(firestore, "categories")
+        );
+        const categoriesData = categoriesQuerySnapshot.docs.map(
+          (doc) => doc.data().name
+        );
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleCategoryChange = (itemValue) => {
     setCategory(itemValue);
@@ -89,7 +126,7 @@ const Buy = () => {
         onValueChange={handleGenderChange}
       >
         <Picker.Item label="Odaberi spol" value="" />
-        {genders.map((gen, index) => (
+        {genderOptions.map((gen, index) => (
           <Picker.Item key={index} label={gen} value={gen} />
         ))}
       </Picker>

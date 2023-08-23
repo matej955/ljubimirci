@@ -10,9 +10,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebaseConfig";
+import { auth } from "../../firebaseConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Firebase from "./firebaseConfig";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");

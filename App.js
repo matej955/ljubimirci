@@ -17,9 +17,9 @@ export default function App() {
         <Stack.Screen name="Prijava" component={Login} />
         <Stack.Screen name="Registracija" component={SignUp} />
         <Stack.Screen name="Pocetna" component={HomePage} />
-        <Stack.Screen name="Kupi" component={Buy} />
+        <Stack.Screen name="Pokloni" component={Buy} />
         <Stack.Screen name="Prodaj" component={Sell} />
-        <Stack.Screen name="Udomi" component={Adopt} />
+        <Stack.Screen name="Dating" component={Adopt} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -18,6 +18,7 @@ import animals from "./images/1.png";
 import BottomPopup from "../PopUp/popUp";
 
 const HomePage = () => {
+  console.log("Inside home page");
   const navigation = useNavigation();
   const [showPopup, setShowPopup] = useState(false);
 
@@ -27,12 +28,12 @@ const HomePage = () => {
 
   const handlePopupOptionPress = (optionName) => {
     closePopup();
-    if (optionName === "Kupi") {
-      navigation.navigate("Kupi");
+    if (optionName === "Pokloni") {
+      navigation.navigate("Pokloni");
     } else if (optionName === "Prodaj") {
       navigation.navigate("Prodaj");
-    } else if (optionName === "Udomi") {
-      navigation.navigate("Udomi");
+    } else if (optionName === "Dating") {
+      navigation.navigate("Dating");
     }
   };
 
@@ -109,9 +110,9 @@ const HomePage = () => {
                 animationType={"fade"}
                 closePopup={closePopup}
                 data={[
-                  { id: 0, name: "Kupi" },
+                  { id: 0, name: "Pokloni" },
                   { id: 1, name: "Prodaj" },
-                  { id: 2, name: "Udomi" },
+                  { id: 2, name: "Dating" },
                 ]}
                 handlePopupOptionPress={handlePopupOptionPress}
                 haveOutsideTouch={true}
